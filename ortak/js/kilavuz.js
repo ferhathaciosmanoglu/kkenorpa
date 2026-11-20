@@ -109,7 +109,8 @@
     const modelHam = temiz(q.get("model"));
     const seri = temiz(q.get("seri") || q.get("sn"));
     const kw = parseInt(modelHam.replace(/\D/g, ""), 10);
-    const satir = (URUN().modeller || []).find((m) => m[0] === kw) || null;
+    const c = URUN().modelCarpan;       // ör. Kalsedon: "3000" → KL30
+    const satir = (URUN().modeller || []).find((m) => m[0] === kw || (c && m[0] * c === kw)) || null;
     return { modelHam, seri, satir };
   }
 
