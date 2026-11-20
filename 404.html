@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 | ENORPA</title>
+<meta name="robots" content="noindex">
+<style>body{font:16px/1.5 system-ui,sans-serif;margin:0;padding:32px 16px;background:#F4F6F8;color:#0F172A;text-align:center}a{display:inline-block;margin-top:16px;padding:14px 20px;border-radius:12px;background:#0E6E8C;color:#fff;font-weight:700;text-decoration:none}</style>
+</head>
+<body>
+<h1 id="b">Sayfa bulunamadı</h1>
+<p id="a">Bütün kılavuzlar için ana sayfaya dönün.</p>
+<a href="/" id="l">ENORPA</a>
+<script>
+var M={tr:["Sayfa bulunamadı","Bütün kılavuzlar için ana sayfaya dönün."],en:["Page not found","Go to the home page to see all manuals."],ru:["Страница не найдена","Все руководства — на главной странице."]};
+var d=(navigator.language||"en").slice(0,2).toLowerCase();d=M[d]?d:(/^(be|kk|ky|uz|tg)$/.test(d)?"ru":d==="az"?"tr":"en");
+document.documentElement.lang=d;document.getElementById("b").textContent=M[d][0];document.getElementById("a").textContent=M[d][1];
+</script>
+</body>
+</html>

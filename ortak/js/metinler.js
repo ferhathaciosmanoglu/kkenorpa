@@ -1,0 +1,60 @@
+/* =====================================================================
+   ortak/js/metinler.js — arayüz metinleri (Ek A) ve birimler (Ek C)
+   Seriye özel metin buraya yazılmaz; o metinler <seri>/urun.js içindedir.
+   ===================================================================== */
+window.METIN = {
+  "dil.etiket":        { tr: "Dil", en: "Language", ru: "Язык" },
+  "indir.ana":         { tr: "Kullanım Kılavuzunu İndir", en: "Download User Manual", ru: "Скачать руководство" },
+  "indir.meta":        { tr: "PDF · {boyut} · Rev.{rev}", en: "PDF · {boyut} · Rev.{rev}", ru: "PDF · {boyut} · ред. {rev}" },
+  "goruntule":         { tr: "Online Görüntüle", en: "View Online", ru: "Открыть онлайн" },
+  "paylas":            { tr: "Paylaş", en: "Share", ru: "Поделиться" },
+  "baglantiKopyalandi":{ tr: "Bağlantı kopyalandı", en: "Link copied", ru: "Ссылка скопирована" },
+  "digerDiller":       { tr: "Diğer diller", en: "Other languages", ru: "Другие языки" },
+  "belgeDili":         { tr: "Belge dili: {dil}", en: "Document language: {dil}", ru: "Язык документа: {dil}" },
+  "dilAdi.tr":         { tr: "Türkçe", en: "Turkish", ru: "турецкий" },
+  "dilAdi.en":         { tr: "İngilizce", en: "English", ru: "английский" },
+  "dilAdi.ru":         { tr: "Rusça", en: "Russian", ru: "русский" },
+  "kosul.gaz":         { tr: "Gaz yakıtlı kazanlarda", en: "For gas-fired boilers", ru: "Для газовых котлов" },
+  "bolum.ozet":        { tr: "Özet Bilgiler", en: "At a Glance", ru: "Основные характеристики" },
+  "bolum.guvenlik":    { tr: "Güvenlik Uyarıları", en: "Safety Warnings", ru: "Меры безопасности" },
+  "bolum.galeri":      { tr: "Görseller", en: "Gallery", ru: "Галерея" },
+  "bolum.dokumanlar":  { tr: "Dokümanlar", en: "Documents", ru: "Документы" },
+  "bolum.iletisim":    { tr: "Servis ve İletişim", en: "Service & Contact", ru: "Сервис и контакты" },
+  "iletisim.ara":      { tr: "Ara", en: "Call", ru: "Позвонить" },
+  "iletisim.whatsapp": { tr: "WhatsApp", en: "WhatsApp", ru: "WhatsApp" },
+  "iletisim.eposta":   { tr: "E-posta", en: "Email", ru: "Эл. почта" },
+  "iletisim.yol":      { tr: "Yol Tarifi", en: "Directions", ru: "Маршрут" },
+  "iletisim.web":      { tr: "Web", en: "Website", ru: "Сайт" },
+  "iletisim.seriNo":   { tr: "Servisi ararken isim plakasındaki model ve seri numarasını hazır bulundurun.",
+                         en: "When calling service, have the model and serial number from the nameplate ready.",
+                         ru: "При обращении в сервис подготовьте модель и серийный номер с заводской таблички." },
+  "galeri.onceki":     { tr: "Önceki görsel", en: "Previous image", ru: "Предыдущее изображение" },
+  "galeri.sonraki":    { tr: "Sonraki görsel", en: "Next image", ru: "Следующее изображение" },
+  "galeri.kapat":      { tr: "Kapat", en: "Close", ru: "Закрыть" },
+  "galeri.buyut":      { tr: "Görseli büyüt", en: "Enlarge image", ru: "Увеличить изображение" },
+  "seviye.tehlike":    { tr: "TEHLİKE", en: "DANGER", ru: "ОПАСНО" },
+  "seviye.uyari":      { tr: "UYARI", en: "WARNING", ru: "ПРЕДУПРЕЖДЕНИЕ" },
+  "seviye.dikkat":     { tr: "DİKKAT", en: "CAUTION", ru: "ОСТОРОЖНО" },
+  "seviye.not":        { tr: "NOT", en: "NOTICE", ru: "ПРИМЕЧАНИЕ" },
+  "dok.kullanim":      { tr: "Kullanım Kılavuzu", en: "User Manual", ru: "Руководство по эксплуатации" },
+  "taslak":            { tr: "TASLAK — yayın öncesi önizleme", en: "DRAFT — pre-release preview", ru: "ЧЕРНОВИК — предварительный просмотр" },
+  "altbilgi.haklar":   { tr: "Tüm hakları saklıdır.", en: "All rights reserved.", ru: "Все права защищены." },
+  /* Kart (bilet) metinleri — Ek A'ya eklenecek */
+  "kart.etiket":       { tr: "Kullanım Kılavuzu", en: "User Manual", ru: "Руководство" },
+  "kart.buKazan":      { tr: "Bu kazan", en: "This boiler", ru: "Этот котёл" },
+  "kart.seriNo":       { tr: "Seri no", en: "Serial no.", ru: "Серийный №" },
+  "model.kapasite":    { tr: "Isıl kapasite", en: "Heat output", ru: "Тепловая мощность" },
+  "model.suHacmi":     { tr: "Su hacmi", en: "Water volume", ru: "Водяной объём" },
+  "model.olcu":        { tr: "En × Boy × Yük.", en: "W × L × H", ru: "Ш × Д × В" },
+  "model.agirlik":     { tr: "Ağırlık", en: "Weight", ru: "Масса" }
+};
+
+window.BIRIM = {
+  kW:    { tr: "kW", en: "kW", ru: "кВт" },
+  kcalh: { tr: "kcal/h", en: "kcal/h", ru: "ккал/ч" },
+  barg:  { tr: "bar(g)", en: "barg", ru: "бар (изб.)" },
+  kg:    { tr: "kg", en: "kg", ru: "кг" },
+  mm:    { tr: "mm", en: "mm", ru: "мм" },
+  m3:    { tr: "m³", en: "m³", ru: "м³" },
+  MB:    { tr: "MB", en: "MB", ru: "МБ" }
+};
