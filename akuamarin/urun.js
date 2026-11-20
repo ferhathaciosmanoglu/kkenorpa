@@ -102,15 +102,23 @@ window.URUN = {
       tur: "kullanim",
       ana: true,
       baslik: { tr: "Kullanım Kılavuzu", en: "User Manual", ru: "Руководство по эксплуатации" },
-      belgeNo: "ENP-AKM",             // ⚠️ PDF'te ENP-AKM-TR; şablon ENR-KLV-AKU öneriyor — birleştirilecek
+      belgeNo: "ENP-AKM",             // PDF kodları: ENP-AKM-TR / -EN / -RU · kaynak: araclar/kilavuz-pdf/
       diller: {
         tr: {
           dosya: "pdf/kilavuz-tr.pdf",
           indirmeAdi: "ENORPA_Akuamarin_Kullanim_Kilavuzu_TR_Rev01.pdf",
-          revizyon: "01", tarih: "2026-11", boyutMB: 1.0, sayfa: 22
+          revizyon: "01", tarih: "2026-11", boyutMB: 1.1, sayfa: 22, onbellek: "20261120"
         },
-        en: null,                     // {{EN PDF}} — yayından önce zorunlu (Bölüm 8.11)
-        ru: null                      // {{RU PDF}} — yayından önce zorunlu (Bölüm 8.11)
+        en: {
+          dosya: "pdf/kilavuz-en.pdf",
+          indirmeAdi: "ENORPA_Akuamarin_User_Manual_EN_Rev01.pdf",
+          revizyon: "01", tarih: "2026-11", boyutMB: 1.1, sayfa: 22, onbellek: "20261120"
+        },
+        ru: {
+          dosya: "pdf/kilavuz-ru.pdf",
+          indirmeAdi: "ENORPA_Akuamarin_Rukovodstvo_RU_Rev01.pdf",
+          revizyon: "01", tarih: "2026-11", boyutMB: 1.1, sayfa: 22, onbellek: "20261120"
+        }
       }
     }
   ],
@@ -130,5 +138,5 @@ window.URUN = {
     calismaSaatleri: null
   },
 
-  ceviriOnay: { en: null, ru: null }
+  ceviriOnay: { en: null, ru: null }   // EN/RU PDF çevirisi hazır; ana dili o dil olan biri okuyup onaylayınca doldurulur
 };

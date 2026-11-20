@@ -92,14 +92,13 @@
     const d = dok.diller[kullanilan];
     return {
       dil: kullanilan,
-      href: d.dosya + "?v=" + encodeURIComponent(d.revizyon),
+      href: d.dosya + "?v=" + encodeURIComponent(d.onbellek || d.revizyon),
       indirmeAdi: d.indirmeAdi,
       boyutMB: d.boyutMB,
       revizyon: d.revizyon,
       farkliDil: kullanilan !== dil
     };
   }
-  const digerDiller = (dok, dil) => DILLER.filter((x) => x !== dil && dok.diller[x]);
   const mbYaz = (mb, dil) => (mb == null ? "" : sayi(mb, dil, 1) + " " + birim("MB", dil));
 
   // QR parametreleri: ?model=4800kW&seri=2345-0683-AKT1-I112 (eski sayfayla uyumlu)
@@ -178,25 +177,70 @@
     baslat();
   }
 
-  /* ---------- Eğim (yalnızca fareli cihazlarda) ---------- */
-  function egimKur(kart) {
-    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  /* ---------- Eğim: farede imleçle, telefonda cihazı sağa sola yatırınca ---------- */
+  const MAX_EGIM = 6;
+  let egimKart = null;               // dil değişiminde kart yeniden çizilir; jiroskop dinleyicisi tek kalır
+  let jiroKuruldu = false;
+
+  function egimUygula(kart, dx, dy) {  // dx, dy: -0.5 … 0.5
     const parlama = kart.querySelector(".bilet-parlama");
-    const MAX = 6;
-    kart.addEventListener("pointermove", (e) => {
-      if (HAREKET_AZ.matches) return;
-      const r = kart.getBoundingClientRect();
-      const dx = (e.clientX - r.left) / r.width - 0.5;
-      const dy = (e.clientY - r.top) / r.height - 0.5;
-      kart.style.transition = "none";
-      kart.style.transform = "rotateX(" + (-dy * 2 * MAX) + "deg) rotateY(" + (dx * 2 * MAX) + "deg) scale(1.01)";
-      parlama.style.background = "radial-gradient(45% 35% at " + (dx + 0.5) * 100 + "% " + (dy + 0.5) * 100 + "%, rgb(255 255 255 / .16), transparent 70%)";
-    });
-    kart.addEventListener("pointerleave", () => {
-      kart.style.transition = "";
-      kart.style.transform = "";
-      parlama.style.background = "transparent";
-    });
+    kart.style.transform = "rotateX(" + (-dy * 2 * MAX_EGIM) + "deg) rotateY(" + (dx * 2 * MAX_EGIM) + "deg) scale(1.01)";
+    parlama.style.background = "radial-gradient(45% 35% at " + (dx + 0.5) * 100 + "% " + (dy + 0.5) * 100 + "%, rgb(255 255 255 / .16), transparent 70%)";
+  }
+
+  function jiroskopKur() {
+    if (jiroKuruldu || !("DeviceOrientationEvent" in window)) return;
+    jiroKuruldu = true;
+    let taban = null, hedef = [0, 0], simdi = [0, 0], raf = 0;
+    const sinirla = (v) => Math.max(-0.5, Math.min(0.5, v));
+    function ciz() {
+      raf = 0;
+      if (!egimKart || HAREKET_AZ.matches) return;
+      simdi[0] += (hedef[0] - simdi[0]) * 0.15;
+      simdi[1] += (hedef[1] - simdi[1]) * 0.15;
+      egimKart.style.transition = "none";
+      egimUygula(egimKart, simdi[0], simdi[1]);
+      if (Math.abs(hedef[0] - simdi[0]) + Math.abs(hedef[1] - simdi[1]) > 0.002) raf = requestAnimationFrame(ciz);
+    }
+    function yonelim(e) {
+      if (e.gamma == null || e.beta == null) return;
+      const yatay = Math.abs(screen.orientation ? screen.orientation.angle : window.orientation || 0) === 90;
+      const x = yatay ? e.beta : e.gamma, y = yatay ? -e.gamma : e.beta;
+      if (!taban) taban = [x, y];
+      taban[0] += (x - taban[0]) * 0.01;      // yavaşça yeni tutuş açısına uyum sağla
+      taban[1] += (y - taban[1]) * 0.01;
+      hedef = [sinirla((x - taban[0]) / 40), sinirla((y - taban[1]) / 40)];
+      if (!raf) raf = requestAnimationFrame(ciz);
+    }
+    addEventListener("deviceorientation", yonelim, { passive: true });   // Android: hemen çalışır
+    const D = window.DeviceOrientationEvent;
+    if (typeof D.requestPermission === "function") {
+      // iOS: izin yalnızca bir dokunuşla istenebilir — veri gelmiyorsa ilk dokunuşta bir kez sorulur
+      const iste = () => {
+        removeEventListener("touchend", iste);
+        if (!taban) D.requestPermission().catch(() => {});
+      };
+      addEventListener("touchend", iste, { passive: true });
+    }
+  }
+
+  function egimKur(kart) {
+    egimKart = kart;
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      kart.addEventListener("pointermove", (e) => {
+        if (HAREKET_AZ.matches) return;
+        const r = kart.getBoundingClientRect();
+        kart.style.transition = "none";
+        egimUygula(kart, (e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
+      });
+      kart.addEventListener("pointerleave", () => {
+        kart.style.transition = "";
+        kart.style.transform = "";
+        kart.querySelector(".bilet-parlama").style.background = "transparent";
+      });
+    } else {
+      jiroskopKur();
+    }
   }
 
   /* ---------- Bölümler ---------- */
@@ -256,18 +300,10 @@
     let indir = "";
     if (pdf) {
       const meta = pdf.boyutMB != null ? arayuz("goruntule.meta", dil, { boyut: mbYaz(pdf.boyutMB, dil) }) : "PDF";
-      const diger = digerDiller(dok, dil);
       indir =
         '<a class="btn-ana" href="' + esc(pdf.href) + '" target="_blank" rel="noopener" hreflang="' + pdf.dil + '">' +
         ikon("goz") + "<span><b>" + arayuz("goruntule", dil) + "</b><small>" + meta + "</small></span></a>" +
         (pdf.farkliDil ? '<p class="belge-dili">' + arayuz("belgeDili", dil, { dil: arayuz("dilAdi." + pdf.dil, dil) }) + "</p>" : "") +
-        (diger.length
-          ? '<div class="diger-diller"><span>' + arayuz("digerDiller", dil) + ":</span>" +
-            diger.map((x) => {
-              const b = pdfBaglantisi(dok, x);
-              return '<a class="baglanti" lang="' + x + '" hreflang="' + x + '" href="' + esc(b.href) + '" download="' + esc(b.indirmeAdi) + '">' + DIL_ADI[x] + "</a>";
-            }).join("<span aria-hidden=\"true\">·</span>") + "</div>"
-          : "") +
         '<div class="ikincil-satir">' +
         '<a class="btn-ikincil" href="' + esc(pdf.href) + '" download="' + esc(pdf.indirmeAdi) + '" hreflang="' + pdf.dil + '">' + ikon("indir") + arayuz("indir", dil) + "</a>" +
         '<button class="btn-ikincil" type="button" data-paylas>' + ikon("paylas") + arayuz("paylas", dil) + "</button>" +

@@ -1,0 +1,144 @@
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font: 400 9.6pt/1.5 "Inter", sans-serif; color: #1c1c1c; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-feature-settings: "tnum" 0; }
+.sayfa { position: relative; width: 210mm; height: 297mm; padding: 11mm 16mm 22mm; overflow: hidden; page-break-after: always; break-after: page; }
+.sayfa:last-child { page-break-after: auto; }
+p { margin: 0 0 7pt; }
+b { font-weight: 700; }
+
+/* Bölüm başlığı */
+.bb { display: flex; align-items: center; gap: 4.2mm; margin-bottom: 7mm; }
+.bb .no { width: 17mm; height: 17mm; border-radius: 50%; border: 2.2mm solid #e8650f; display: grid; place-items: center;
+  font: 800 13pt/1 "Inter"; color: #1c1c1c; flex: none; }
+.bb .ust { font: 700 6.6pt/1.2 "Inter"; letter-spacing: .16em; color: #e8650f; margin-bottom: 1.2mm; }
+.bb h1 { margin: 0; font: 800 17pt/1.15 "Inter"; letter-spacing: -.01em; }
+
+h2 { font: 700 10pt/1.3 "Inter"; margin: 5.2mm 0 2.2mm; }
+.govde > h2:first-child, .ikisutun h2:first-child { margin-top: 0; }
+
+/* Tablolar */
+table.t { width: 100%; border-collapse: collapse; margin: 0 0 4.5mm; font-size: 9.2pt; }
+table.t th { background: #2b2b2b; color: #fff; text-align: left; font: 700 7pt/1.3 "Inter"; padding: 2.3mm 2.6mm; }
+table.t td { padding: 2.1mm 2.6mm; border-bottom: .3mm solid #dedede; vertical-align: top; line-height: 1.45; }
+table.t td.k { font-weight: 600; width: 37%; }
+table.t.g1 td.k { width: 34%; }
+table.t.sik td { padding: 1.45mm 2.6mm; }
+table.t td small { display: block; font-weight: 400; font-size: 6.8pt; color: #666; }
+table.veri { font-size: 8.4pt; }
+table.veri th, table.veri td { text-align: center; padding: 1.5mm 1.6mm; }
+table.veri th:first-child, table.veri td:first-child { text-align: left; }
+table.veri tbody tr:nth-child(even) td { background: #f6f6f6; }
+table.veri .m { color: #c2410c; font-weight: 700; }
+table.veri.buyuk td { padding: 2.25mm 1.6mm; }
+table.veri.buyuk th { font-size: 6.6pt; vertical-align: middle; }
+
+/* Notlar */
+.not { border-left: 1.1mm solid #e8650f; background: #fdf0e6; padding: 2.6mm 3.8mm 2.8mm; margin: 0 0 4.5mm; border-radius: 0 1.4mm 1.4mm 0; }
+.not > b { display: block; font: 700 7pt/1.3 "Inter"; letter-spacing: .06em; color: #c2410c; margin-bottom: 1.1mm; }
+.not p { margin: 0; }
+.not ul { margin: 0; padding-left: 4.5mm; }
+.not li { margin: .6mm 0; }
+.not.tehlike { border-color: #c62828; background: #fbeaea; }
+.not.tehlike > b { color: #c62828; }
+.not.bilgi { border-color: #8a8a8a; background: #f3f3f3; }
+.not.bilgi > b { color: #555; }
+.isaret { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; margin-bottom: 3mm; }
+.isaret .not { margin: 0; }
+
+/* Listeler */
+ol.adim { list-style: none; counter-reset: a; padding: 0; margin: 0 0 4.5mm; }
+ol.adim li { counter-increment: a; position: relative; padding-left: 8mm; margin: 0 0 1.8mm; }
+ol.adim li::before { content: counter(a); position: absolute; left: 0; top: .1mm; width: 4.6mm; height: 4.6mm; border-radius: 50%;
+  background: #1c1c1c; color: #fff; font: 700 6.8pt/4.6mm "Inter"; text-align: center; }
+ul.madde { margin: 0 0 4.5mm; padding-left: 5mm; }
+ul.madde li { margin: 0 0 1.4mm; }
+ul.madde li::marker { color: #1c1c1c; }
+.kucuk { font-size: 7.4pt; color: #555; line-height: 1.55; }
+
+/* Sınır kartları */
+.sinir { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.4mm; margin: 0 0 4.5mm; }
+.sinir div { border: .3mm solid #d8d8d8; border-radius: 1.6mm; padding: 2.2mm 2.6mm; min-height: 15mm; }
+.sinir b { display: block; font: 700 10pt/1.2 "Inter"; }
+.sinir span { display: block; font-size: 6.8pt; color: #555; line-height: 1.35; margin-top: .6mm; }
+
+/* Görseller */
+figure { margin: 0; }
+figcaption { font-size: 6.8pt; color: #666; margin-top: 1.6mm; line-height: 1.45; }
+.yapi { display: grid; grid-template-columns: 1.15fr 1fr; gap: 6mm; align-items: start; }
+.yapi img { width: 100%; border-radius: 1.6mm; background: #f2f2f2; }
+.yapi table td.k { width: 33%; }
+.iki { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-bottom: 4.5mm; }
+.iki img { width: 100%; aspect-ratio: 6 / 5; object-fit: cover; border-radius: 1.6mm; display: block; }
+.sema { margin: 0 0 3mm; text-align: center; }
+.sema svg { width: 150mm; }
+.ikisutun { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+.sema2 svg { width: 100%; display: block; }
+.sema2 { margin-bottom: 4.5mm; }
+.s06 ul.madde li { margin-bottom: 1.6mm; }
+
+/* İçindekiler */
+.icind { list-style: none; padding: 0; margin: 0 0 6mm; }
+.icind li { display: flex; align-items: baseline; gap: 6mm; padding: 2.15mm 0; border-bottom: .25mm solid #e6e6e6; font-size: 9pt; }
+.icind b { color: #e8650f; width: 6mm; font-size: 8pt; }
+.icind span { flex: 1; }
+.icind i { font-style: normal; color: #333; font-size: 8pt; }
+
+/* Formlar */
+.alanlar { display: grid; grid-template-columns: 1fr 1fr; gap: 3.2mm 8mm; margin: 0 0 4.5mm; }
+.alanlar.tek { grid-template-columns: 1fr; }
+.alan { display: flex; align-items: flex-end; gap: 3mm; font-size: 8pt; }
+.alan span { white-space: nowrap; }
+.alan i { flex: 1; border-bottom: .3mm solid #999; height: 4mm; }
+table.form td { font-size: 8pt; padding: 1.9mm 2.6mm; border: .3mm solid #dedede; }
+table.form td.sonuc { width: 26%; color: #444; font-size: 7.6pt; }
+table.olcum td:not(:first-child) { width: 22%; }
+table.olcum td { height: 6.2mm; padding: 1.3mm 2.6mm; }
+.imzalar { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin: 6mm 0 3mm; }
+.imzalar i { display: block; border-bottom: .3mm solid #999; height: 8mm; margin-bottom: 1.2mm; }
+.imzalar b { display: block; font-size: 8pt; }
+.imzalar span { font-size: 6.8pt; color: #666; }
+table.bos td { height: 8.4mm; border: .3mm solid #d6d6d6; }
+table.bos.k1 th:nth-child(1) { width: 15%; } table.bos.k1 th:nth-child(3) { width: 19%; } table.bos.k1 th:nth-child(4) { width: 19%; }
+
+/* İletişim bandı */
+.iletisim { display: grid; grid-template-columns: 1.4fr 1fr .8fr; gap: 6mm; background: #2b2b2b; color: #fff; border-radius: 1.8mm; padding: 5mm 6mm; margin: 2mm 0 5mm; font-size: 8.4pt; }
+.iletisim small { display: block; font: 700 6.2pt/1.2 "Inter"; letter-spacing: .1em; color: #f28c4a; margin-bottom: 1.2mm; }
+.iletisim b { display: block; margin-bottom: 1mm; }
+.iletisim span { color: #ddd; line-height: 1.45; }
+
+/* Altbilgi */
+footer { position: absolute; left: 16mm; right: 16mm; bottom: 9mm; border-top: .3mm solid #e2e2e2; padding-top: 2mm;
+  display: grid; grid-template-columns: 1fr auto 18mm; font-size: 6.4pt; color: #666; align-items: center; }
+footer span:nth-child(2) { padding-right: 18mm; }
+footer b { text-align: right; color: #1c1c1c; font-size: 6.8pt; }
+
+/* Kapak */
+.kapak { background: #2e2e2f; color: #fff; padding: 21mm 18mm 0; }
+.klogo { width: 52mm; display: block; margin-bottom: 26mm; }
+.kust { font: 700 8pt/1 "Inter"; letter-spacing: .2em; color: #f28c4a; margin-bottom: 4mm; }
+.kapak h1 { font: 800 30pt/1.1 "Inter"; letter-spacing: -.015em; margin: 0 0 5mm; }
+.kalt { font-size: 12pt; color: #e8e8e8; margin-bottom: 5.5mm; }
+.hap { display: inline-flex; gap: 2.4mm; align-items: center; border: .45mm solid #e8650f; border-radius: 999px; padding: 2.2mm 5mm; font-size: 8.6pt; margin-bottom: 9mm; }
+.hap .ayrac { color: #888; }
+.kresim { width: 100%; height: 118mm; border-radius: 2.4mm; overflow: hidden; background: #474747; }
+.kresim img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kbant { position: absolute; left: 0; right: 0; bottom: 0; height: 24mm; background: #e2601f; display: grid; grid-template-columns: 62mm 1fr;
+  align-items: center; padding: 0 18mm; gap: 6mm; }
+.kbant b { display: block; font: 800 10.5pt/1.3 "Inter"; }
+.kbant span { font-size: 7.6pt; }
+.kbant p { margin: 0; font-size: 8pt; line-height: 1.5; }
+.dil-ru .kapak h1 { font-size: 27pt; }
+table.veri .m { white-space: nowrap; }
+/* Rusça metin ~%20 daha uzun: aynı sayfa düzenine sığması için hafif sıkılaştırma */
+.dil-ru { font-size: 9pt; line-height: 1.45; }
+.dil-ru table.t { font-size: 8.6pt; }
+.dil-ru table.t td { padding: 1.7mm 2.4mm; }
+.dil-ru .not { padding: 2.2mm 3.4mm 2.4mm; margin-bottom: 3.8mm; }
+.dil-ru h2 { margin-top: 4.4mm; }
+.dil-en table.t td { padding: 1.9mm 2.6mm; }
+.dil-ru .iki img { aspect-ratio: 16 / 11; }
+.dil-ru table.form td { padding: 1.4mm 2.4mm; }
+.dil-ru table.olcum td { height: 5.4mm; }
+.dil-ru .alanlar { gap: 2.6mm 6mm; }
+.dil-ru .alan { font-size: 7.6pt; }
