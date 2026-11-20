@@ -102,6 +102,15 @@ window.URUN = {
       }
     },
     {
+      // Otomasyon panosu kullanım kılavuzu ve elektrik projesi — yalnızca Türkçe (kaynak: Pano Kullanım Klavuzu.pdf)
+      tur: "pano",
+      goster: true,
+      baslik: { tr: "Otomasyon Panosu Kullanım Kılavuzu", en: "Automation Panel Manual", ru: "Руководство по щиту автоматики" },
+      diller: {
+        tr: { dosya: "pdf/pano-tr.pdf", indirmeAdi: "ENORPA_Kalsedon_Pano_Kullanim_Kilavuzu_TR.pdf", revizyon: "01", boyutMB: 0.6, sayfa: 13, onbellek: "20261120" }
+      }
+    },
+    {
       // Ürün broşürü (2026) — sayfada şimdilik gösterilmiyor; doğrudan bağlantıyla açılabilir
       tur: "katalog",
       baslik: { tr: "Ürün Kataloğu", en: "Product Catalogue", ru: "Каталог продукции" },

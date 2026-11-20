@@ -399,6 +399,24 @@
     );
   }
 
+  // Ek dokümanlar: urun.js'de "goster: true" olan, ana olmayan belgeler (ör. pano kılavuzu)
+  function dokumanlarHTML(dil) {
+    const liste = (URUN().dokumanlar || []).filter((d) => !d.ana && d.goster);
+    if (!liste.length) return "";
+    const satirlar = liste.map((d) => {
+      const pdf = pdfBaglantisi(d, dil);
+      if (!pdf) return "";
+      const meta = [d.diller[pdf.dil].sayfa ? d.diller[pdf.dil].sayfa + " " + ({ tr: "sayfa", en: "pages", ru: "стр." })[dil] : "", mbYaz(pdf.boyutMB, dil),
+        pdf.farkliDil ? arayuz("dilAdi." + pdf.dil, dil) : ""].filter(Boolean).join(" · ");
+      return '<a class="ilt-satir" href="' + esc(pdf.href) + '" target="_blank" rel="noopener" hreflang="' + pdf.dil + '">' +
+        '<span class="ilt-ikon">' + ikon("dosya") + "</span>" +
+        '<span class="ilt-metin"><small>PDF' + (meta ? " · " + esc(meta) : "") + "</small><b>" + esc(metin(d.baslik, dil)) + "</b></span>" +
+        ikon("indir", "ikon ok") + "</a>";
+    }).join("");
+    return '<section class="bolum" aria-labelledby="b-dokumanlar"><h2 id="b-dokumanlar">' + arayuz("bolum.dokumanlar", dil) + "</h2>" +
+      '<div class="panel iletisim">' + satirlar + "</div></section>";
+  }
+
   function iletisimHTML(dil) {
     const i = URUN().iletisim;
     if (!i) return "";
@@ -512,7 +530,7 @@
     const galeriKonum = icerik.querySelector(".galeri-serit");
     const galeriSol = galeriKonum ? galeriKonum.scrollLeft : 0;
 
-    icerik.innerHTML = biletHTML(dil) + guvenlikHTML(dil) + iletisimHTML(dil);
+    icerik.innerHTML = biletHTML(dil) + guvenlikHTML(dil) + dokumanlarHTML(dil) + iletisimHTML(dil);
     document.querySelector(".alt-bilgi").innerHTML = altBilgiHTML(dil);
 
     const serit = icerik.querySelector(".galeri-serit");
