@@ -6,7 +6,7 @@
    ===================================================================== */
 window.URUN = {
   sablonSurumu: "1.1",
-  durum: "taslak",                    // EN/RU PDF, çeviri onayı ve K-kararları gelince "yayinda"
+  durum: "yayinda",                   // yayında — EN/RU PDF ve çeviri onayı hâlâ bekliyor (Bölüm 8.11)
   kod: "akuamarin",
   belgeKodu: "AKU",
   ad: "Akuamarin",                    // çevrilmez, CSS ile büyütülmez (🟡 K-03)
