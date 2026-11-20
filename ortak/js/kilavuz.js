@@ -235,22 +235,28 @@
     }
   }
 
-  function raptiyeKur(kart, dil) {
-    const d = kart.querySelector(".bilet-raptiye");
+  // Raptiye üst barın solunda durur; kart her çizimde yenilense de düğme tektir
+  let raptiyeDil = "tr";
+  function raptiyeGuncelle() {
+    const d = document.querySelector(".raptiye");
     if (!d) return;
-    const guncelle = () => {
-      d.setAttribute("aria-pressed", String(sabit));
-      d.setAttribute("aria-label", arayuz(sabit ? "kart.serbest" : "kart.sabitle", dil));
-      d.title = d.getAttribute("aria-label");
-    };
-    guncelle();
-    d.addEventListener("click", (e) => {
-      e.stopPropagation();
+    d.setAttribute("aria-pressed", String(sabit));
+    d.setAttribute("aria-label", arayuz(sabit ? "kart.serbest" : "kart.sabitle", raptiyeDil));
+    d.title = d.getAttribute("aria-label");
+  }
+  function raptiyeKur(kart, dil) {
+    raptiyeDil = dil;
+    const d = document.querySelector(".raptiye");
+    if (!d) return;
+    raptiyeGuncelle();
+    if (d.dataset.kurulu) return;
+    d.dataset.kurulu = "1";
+    d.addEventListener("click", () => {
       sabit = !sabit;
       try { localStorage.setItem(SABIT_ANAHTARI, sabit ? "1" : "0"); } catch (_) {}
-      if (sabit) duzle(kart);
-      guncelle();
-      bildir(arayuz(sabit ? "kart.sabitlendi" : "kart.serbestBirakildi", dil));
+      if (sabit && egimKart) duzle(egimKart);
+      raptiyeGuncelle();
+      bildir(arayuz(sabit ? "kart.sabitlendi" : "kart.serbestBirakildi", raptiyeDil));
     });
   }
 
@@ -342,7 +348,6 @@
           '<canvas class="bilet-doku" aria-hidden="true"></canvas>' +
           '<span class="bilet-filigran" aria-hidden="true">' + esc(u.belgeKodu) + "</span>" +
           '<div class="bilet-satir">' + kartLogo +
-            '<button class="bilet-raptiye" type="button" aria-pressed="false">' + ikon("raptiye") + "</button>" +
             '<span class="bilet-rev">' + arayuz("kart.etiket", dil) + "</span>" +
           "</div>" +
           '<div class="bilet-tur">' + esc(metin(u.tur, dil)) + "</div>" +
@@ -522,6 +527,7 @@
   function ustBarCiz() {
     const bar = document.querySelector(".ust-bar");
     bar.innerHTML =
+      '<button class="raptiye" type="button" aria-pressed="false">' + ikon("raptiye") + "</button>" +
       '<div class="dil-alani">' + ikon("dunya", "dil-ikon") +
       '<div class="dil-secici" role="radiogroup" aria-label="Dil · Language · Язык" data-aktif="tr">' +
       DILLER.map((d, i) =>
