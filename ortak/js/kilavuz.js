@@ -182,9 +182,9 @@
   let egimKart = null;               // dil değişiminde kart yeniden çizilir; jiroskop dinleyicisi tek kalır
   let jiroKuruldu = false;
 
-  function egimUygula(kart, dx, dy) {  // dx, dy: -0.5 … 0.5
+  function egimUygula(kart, dx, dy, max = MAX_EGIM) {  // dx, dy: -0.5 … 0.5
     const parlama = kart.querySelector(".bilet-parlama");
-    kart.style.transform = "rotateX(" + (-dy * 2 * MAX_EGIM) + "deg) rotateY(" + (dx * 2 * MAX_EGIM) + "deg) scale(1.01)";
+    kart.style.transform = "rotateX(" + (-dy * 2 * max) + "deg) rotateY(" + (dx * 2 * max) + "deg) scale(1.01)";
     parlama.style.background = "radial-gradient(45% 35% at " + (dx + 0.5) * 100 + "% " + (dy + 0.5) * 100 + "%, rgb(255 255 255 / .16), transparent 70%)";
   }
 
@@ -199,7 +199,7 @@
       simdi[0] += (hedef[0] - simdi[0]) * 0.15;
       simdi[1] += (hedef[1] - simdi[1]) * 0.15;
       egimKart.style.transition = "none";
-      egimUygula(egimKart, simdi[0], simdi[1]);
+      egimUygula(egimKart, simdi[0], simdi[1], 14);   // telefonda daha belirgin eğim
       if (Math.abs(hedef[0] - simdi[0]) + Math.abs(hedef[1] - simdi[1]) > 0.002) raf = requestAnimationFrame(ciz);
     }
     function yonelim(e) {
@@ -209,7 +209,7 @@
       if (!taban) taban = [x, y];
       taban[0] += (x - taban[0]) * 0.01;      // yavaşça yeni tutuş açısına uyum sağla
       taban[1] += (y - taban[1]) * 0.01;
-      hedef = [sinirla((x - taban[0]) / 40), sinirla((y - taban[1]) / 40)];
+      hedef = [sinirla((x - taban[0]) / 30), sinirla((y - taban[1]) / 30)];
       if (!raf) raf = requestAnimationFrame(ciz);
     }
     addEventListener("deviceorientation", yonelim, { passive: true });   // Android: hemen çalışır

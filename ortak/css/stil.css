@@ -139,7 +139,7 @@ main.dil-gecisi { opacity: 0; }
 /* =====================================================================
    BİLET KART — dikey (mobil) · üstte akuamarin doku, altta görsel + bilgi
    ===================================================================== */
-.bilet-sahne { perspective: 1200px; }
+.bilet-sahne { perspective: 900px; }
 .bilet {
   --delik: 14px;                       /* yan çentik yarıçapı */
   position: relative;
@@ -150,7 +150,7 @@ main.dil-gecisi { opacity: 0; }
   transform-style: preserve-3d;
   will-change: transform;
   transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
-  animation: bilet-gelis 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: bilet-gelis 640ms cubic-bezier(0.22, 1, 0.36, 1) backwards;   /* "both" eğimi ezerdi */
 }
 @keyframes bilet-gelis {
   from { opacity: 0; transform: translateY(24px) scale(.98); }
