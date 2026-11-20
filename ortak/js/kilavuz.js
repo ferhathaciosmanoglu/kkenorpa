@@ -292,7 +292,7 @@
     let modelKutu = "";
     if (qr.modelHam || qr.seri) {
       const parca = [];
-      if (qr.satir) parca.push(esc(u.ad) + " " + sayi(qr.satir[0], dil) + " " + birim("kW", dil));
+      if (qr.satir) parca.push(esc(u.ad) + " " + (u.modelOnEki ? esc(u.modelOnEki) + qr.satir[0] : sayi(qr.satir[0], dil) + " " + birim("kW", dil)));
       else if (qr.modelHam) parca.push(esc(u.ad) + " " + esc(qr.modelHam));
       modelKutu =
         '<div class="bilet-model"><span>' + arayuz("kart.buKazan", dil) + "</span>" +
@@ -306,8 +306,11 @@
     if (qr.satir) {
       const m = qr.satir;
       cipler = [
-        [arayuz("model.kapasite", dil), aralik([m[1], m[2]], dil) + " " + birim("kcalh", dil)],
-        [arayuz("model.suHacmi", dil), sayi(m[3], dil, 3) + " " + birim("m3", dil)],
+        [arayuz("model.kapasite", dil), (m[1] === m[2] ? sayi(m[1], dil) : aralik([m[1], m[2]], dil)) + " " + birim("kcalh", dil)],
+        // su hacmi kaynakta yoksa (null) yerine urun.js'deki modelEkCip sütunu gösterilir
+        m[3] != null || !u.modelEkCip
+          ? [arayuz("model.suHacmi", dil), sayi(m[3], dil, 3) + " " + birim("m3", dil)]
+          : [metin(u.modelEkCip.etiket, dil), String(m[u.modelEkCip.sutun])],
         [arayuz("model.olcu", dil), sayi(m[4], dil) + " × " + sayi(m[5], dil) + " × " + sayi(m[6], dil) + " " + birim("mm", dil)],
         [arayuz("model.agirlik", dil), sayi(m[7], dil) + " " + birim("kg", dil)]
       ];
@@ -334,7 +337,7 @@
       const meta = pdf.boyutMB != null ? arayuz("goruntule.meta", dil, { boyut: mbYaz(pdf.boyutMB, dil) }) : "PDF";
       indir =
         '<a class="btn-ana" href="' + esc(pdf.href) + '" target="_blank" rel="noopener" hreflang="' + pdf.dil + '">' +
-        ikon("goz") + "<span><b>" + arayuz("goruntule", dil) + "</b><small>" + meta + "</small></span></a>" +
+        ikon("goz") + "<span><b>" + (dok.butonEtiketi ? esc(metin(dok.butonEtiketi, dil)) : arayuz("goruntule", dil)) + "</b><small>" + meta + "</small></span></a>" +
         (pdf.farkliDil ? '<p class="belge-dili">' + arayuz("belgeDili", dil, { dil: arayuz("dilAdi." + pdf.dil, dil) }) + "</p>" : "") +
         '<div class="ikincil-satir">' +
         '<a class="btn-ikincil" href="' + esc(pdf.href) + '" download="' + esc(pdf.indirmeAdi) + '" hreflang="' + pdf.dil + '">' + ikon("indir") + arayuz("indir", dil) + "</a>" +
@@ -348,7 +351,7 @@
           '<canvas class="bilet-doku" aria-hidden="true"></canvas>' +
           '<span class="bilet-filigran" aria-hidden="true">' + esc(u.belgeKodu) + "</span>" +
           '<div class="bilet-satir">' + kartLogo +
-            '<span class="bilet-rev">' + arayuz("kart.etiket", dil) + "</span>" +
+            '<span class="bilet-rev">' + (dok.kartEtiketi ? esc(metin(dok.kartEtiketi, dil)) : arayuz("kart.etiket", dil)) + "</span>" +
           "</div>" +
           '<div class="bilet-tur">' + esc(metin(u.tur, dil)) + "</div>" +
           '<h1 id="seri-adi">' + esc(u.ad) + (u.rozet ? '<span class="bilet-rozet">' + esc(u.rozet) + "</span>" : "") + "</h1>" +
