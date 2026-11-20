@@ -12,7 +12,7 @@ window.URUN = {
   ad: "Akuamarin",                    // çevrilmez, CSS ile büyütülmez (🟡 K-03)
   rozet: null,
   tur: { tr: "Sıcak Su Kazanı", en: "Hot Water Boiler", ru: "Водогрейный котёл" },
-  renk: { vurgu: "#0E6E8C", acik: "#E3F1F5", koyu: "#0A5670", doku: "#117A99" }, // [ÖNERİ] 🟡 K-07
+  renk: { vurgu: "#D2541A", acik: "#FBEEE7", koyu: "#E2601F", doku: "#EE7A3D" }, // ENORPA turuncusu (logo #F26532)
 
   meta: {
     baslik: {

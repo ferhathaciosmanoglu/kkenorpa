@@ -56,8 +56,6 @@
   const sayi = (n, dil, ondalik = 0) =>
     new Intl.NumberFormat(YEREL[dil], { minimumFractionDigits: ondalik, maximumFractionDigits: ondalik }).format(n);
   const aralik = ([a, b], dil, ondalik = 0) => sayi(a, dil, ondalik) + "–" + sayi(b, dil, ondalik);
-  const ayYil = (iso, dil) =>
-    new Intl.DateTimeFormat(YEREL[dil], { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(iso + "-01"));
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -81,9 +79,8 @@
   const ikon = (ad, sinif = "ikon") =>
     '<svg class="' + sinif + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + IKON[ad] + "</svg>";
 
-  // ENORPA logosu: bölünmüş halka "O" (renk --enorpa-ana)
-  const LOGO_O = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--enorpa-ana)" stroke-width="3.4" stroke-dasharray="11.6 2.54" transform="rotate(-50 12 12)"/></svg>';
-  const logo = (sinif = "") => '<span class="logo ' + sinif + '" aria-label="ENORPA">EN' + LOGO_O + "RPA</span>";
+  // Gerçek ENORPA logosu (ortak/img/enorpa-logo.png'den türetilmiş beyaz sürüm)
+  const kartLogo = '<img class="bilet-logo" src="../ortak/img/enorpa-logo-beyaz.png" width="480" height="117" alt="ENORPA">';
 
   /* ---------- Yardımcılar ---------- */
   const URUN = () => window.URUN;
@@ -258,11 +255,11 @@
 
     let indir = "";
     if (pdf) {
-      const meta = arayuz("indir.meta", dil, { boyut: mbYaz(pdf.boyutMB, dil), rev: pdf.revizyon }).replace(" ·  ·", " ·");
+      const meta = pdf.boyutMB != null ? arayuz("goruntule.meta", dil, { boyut: mbYaz(pdf.boyutMB, dil) }) : "PDF";
       const diger = digerDiller(dok, dil);
       indir =
-        '<a class="btn-ana" href="' + esc(pdf.href) + '" download="' + esc(pdf.indirmeAdi) + '" hreflang="' + pdf.dil + '">' +
-        ikon("indir") + "<span><b>" + arayuz("indir.ana", dil) + "</b><small>" + meta + "</small></span></a>" +
+        '<a class="btn-ana" href="' + esc(pdf.href) + '" target="_blank" rel="noopener" hreflang="' + pdf.dil + '">' +
+        ikon("goz") + "<span><b>" + arayuz("goruntule", dil) + "</b><small>" + meta + "</small></span></a>" +
         (pdf.farkliDil ? '<p class="belge-dili">' + arayuz("belgeDili", dil, { dil: arayuz("dilAdi." + pdf.dil, dil) }) + "</p>" : "") +
         (diger.length
           ? '<div class="diger-diller"><span>' + arayuz("digerDiller", dil) + ":</span>" +
@@ -272,7 +269,7 @@
             }).join("<span aria-hidden=\"true\">·</span>") + "</div>"
           : "") +
         '<div class="ikincil-satir">' +
-        '<a class="btn-ikincil" href="' + esc(pdf.href) + '" target="_blank" rel="noopener">' + ikon("goz") + arayuz("goruntule", dil) + "</a>" +
+        '<a class="btn-ikincil" href="' + esc(pdf.href) + '" download="' + esc(pdf.indirmeAdi) + '" hreflang="' + pdf.dil + '">' + ikon("indir") + arayuz("indir", dil) + "</a>" +
         '<button class="btn-ikincil" type="button" data-paylas>' + ikon("paylas") + arayuz("paylas", dil) + "</button>" +
         "</div>";
     }
@@ -282,8 +279,8 @@
         '<div class="bilet-ust">' +
           '<canvas class="bilet-doku" aria-hidden="true"></canvas>' +
           '<span class="bilet-filigran" aria-hidden="true">' + esc(u.belgeKodu) + "</span>" +
-          '<div class="bilet-satir">' + logo("logo-acik") +
-            (pdf ? '<span class="bilet-rev">' + arayuz("kart.etiket", dil) + " · Rev." + esc(pdf.revizyon) + "</span>" : "") +
+          '<div class="bilet-satir">' + kartLogo +
+            '<span class="bilet-rev">' + arayuz("kart.etiket", dil) + "</span>" +
           "</div>" +
           '<div class="bilet-tur">' + esc(metin(u.tur, dil)) + "</div>" +
           '<h1 id="seri-adi">' + esc(u.ad) + (u.rozet ? '<span class="bilet-rozet">' + esc(u.rozet) + "</span>" : "") + "</h1>" +
@@ -311,35 +308,21 @@
   function guvenlikHTML(dil) {
     const liste = URUN().guvenlik.slice(0, 5).map((g) => (typeof g === "string" ? window.UYARILAR[g] : g)).filter(Boolean);
     if (!liste.length) return "";
-    const ik = { tehlike: "ucgen", uyari: "ucgen", dikkat: "ucgen", not: "bilgi" };
+    const satir = (u) =>
+      '<li class="uyari" data-seviye="' + u.seviye + '">' +
+        '<span class="uyari-seviye">' + arayuz("seviye." + u.seviye, dil) +
+          (u.kosul ? "<small>" + arayuz(u.kosul, dil) + "</small>" : "") + "</span>" +
+        "<p>" + esc(metin(u.metin, dil)) + "</p></li>";
+    const ilk = liste.slice(0, 1), kalan = liste.slice(1);
     return (
       '<section class="bolum" aria-labelledby="b-guvenlik"><h2 id="b-guvenlik">' + arayuz("bolum.guvenlik", dil) + "</h2>" +
-      '<div class="uyarilar">' +
-      liste.map((u) =>
-        '<div class="uyari" data-seviye="' + u.seviye + '">' + ikon(ik[u.seviye] || "ucgen") +
-        "<b>" + arayuz("seviye." + u.seviye, dil) + (u.kosul ? "<small>" + arayuz(u.kosul, dil) + "</small>" : "") + "</b>" +
-        "<p>" + esc(metin(u.metin, dil)) + "</p></div>"
-      ).join("") +
-      "</div></section>"
-    );
-  }
-
-  function dokumanlarHTML(dil) {
-    const dokler = URUN().dokumanlar.filter((d) => DILLER.some((x) => d.diller[x]));
-    if (!dokler.length) return "";
-    return (
-      '<section class="bolum" aria-labelledby="b-dok"><h2 id="b-dok">' + arayuz("bolum.dokumanlar", dil) + "</h2><div class=\"liste\">" +
-      dokler.map((d) => {
-        const b = pdfBaglantisi(d, dil);
-        const dd = d.diller[b.dil];
-        const meta = [d.belgeNo + "-" + b.dil.toUpperCase(), "Rev." + dd.revizyon, dd.tarih ? ayYil(dd.tarih, dil) : "", mbYaz(dd.boyutMB, dil)].filter(Boolean).join(" · ");
-        const rozet = DILLER.filter((x) => d.diller[x]).map((x) => {
-          const r = pdfBaglantisi(d, x);
-          return '<a class="rozet" lang="' + x + '" hreflang="' + x + '" href="' + esc(r.href) + '" download="' + esc(r.indirmeAdi) + '" aria-label="' + esc(metin(d.baslik, dil) + " — " + DIL_ADI[x]) + '">' + x.toUpperCase() + "</a>";
-        }).join("");
-        return '<div class="satir">' + ikon("dosya") + '<div class="satir-metin"><b>' + esc(metin(d.baslik, dil)) + "</b><small>" + esc(meta) + "</small></div>" +
-          '<div class="rozetler">' + rozet + "</div></div>";
-      }).join("") +
+      '<div class="panel">' +
+        '<ul class="uyarilar">' + ilk.map(satir).join("") + "</ul>" +
+        (kalan.length
+          ? '<details class="uyari-diger"><summary><span class="ac">' + arayuz("guvenlik.tumu", dil, { n: kalan.length }) + "</span>" +
+            '<span class="kapa">' + arayuz("guvenlik.gizle", dil) + "</span>" + ikon("sag", "ikon ok") + "</summary>" +
+            '<ul class="uyarilar">' + kalan.map(satir).join("") + "</ul></details>"
+          : "") +
       "</div></section>"
     );
   }
@@ -350,20 +333,22 @@
     const bos = (v) => !v || /\{\{/.test(v);
     const qr = qrBilgisi();
     const konu = ["Servis talebi", URUN().ad, qr.modelHam, qr.seri ? "SN " + qr.seri : ""].filter(Boolean).join(" – ");
-    const btn = [];
-    if (!bos(i.telefon)) btn.push('<a href="tel:' + esc(i.telefon.replace(/[^\d+]/g, "")) + '">' + ikon("telefon") + arayuz("iletisim.ara", dil) + "</a>");
-    if (!bos(i.whatsapp)) btn.push('<a href="https://wa.me/' + esc(i.whatsapp) + '" target="_blank" rel="noopener">' + ikon("whatsapp") + arayuz("iletisim.whatsapp", dil) + "</a>");
-    if (!bos(i.eposta)) btn.push('<a href="mailto:' + esc(i.eposta) + "?subject=" + encodeURIComponent(konu) + '">' + ikon("zarf") + arayuz("iletisim.eposta", dil) + "</a>");
-    if (!bos(i.harita)) btn.push('<a href="' + esc(i.harita) + '" target="_blank" rel="noopener">' + ikon("harita") + arayuz("iletisim.yol", dil) + "</a>");
+    const s = [];
+    const satir = (href, ik, etiket, deger, yeni) =>
+      '<a class="ilt-satir" href="' + esc(href) + '"' + (yeni ? ' target="_blank" rel="noopener"' : "") + ">" +
+        '<span class="ilt-ikon">' + ikon(ik) + "</span>" +
+        '<span class="ilt-metin"><small>' + etiket + "</small><b>" + esc(deger) + "</b></span>" +
+        ikon("sag", "ikon ok") + "</a>";
+    if (!bos(i.telefon)) s.push(satir("tel:" + i.telefon.replace(/[^\d+]/g, ""), "telefon", arayuz("iletisim.telefon", dil), i.telefon));
+    if (!bos(i.whatsapp)) s.push(satir("https://wa.me/" + i.whatsapp, "whatsapp", arayuz("iletisim.whatsapp", dil), "+" + i.whatsapp, true));
+    if (!bos(i.eposta)) s.push(satir("mailto:" + i.eposta + "?subject=" + encodeURIComponent(konu), "zarf", arayuz("iletisim.eposta", dil), i.eposta));
+    if (!bos(i.harita)) s.push(satir(i.harita, "harita", arayuz("iletisim.adres", dil), metin(i.adres, dil), true));
+    if (!bos(i.web)) s.push(satir(i.web, "dunya", arayuz("iletisim.web", dil), i.web.replace(/^https?:\/\/|\/$/g, ""), true));
     return (
       '<section class="bolum" aria-labelledby="b-iletisim"><h2 id="b-iletisim">' + arayuz("bolum.iletisim", dil) + "</h2>" +
-      '<div class="iletisim-butonlar">' + btn.join("") + "</div>" +
-      '<p class="iletisim-not">' + arayuz("iletisim.seriNo", dil) + "</p>" +
-      '<p class="iletisim-detay">' +
-        (!bos(i.telefon) ? esc(i.telefon) + " · " : "") +
-        (!bos(i.eposta) ? '<a href="mailto:' + esc(i.eposta) + '">' + esc(i.eposta) + "</a>" : "") +
-        (!bos(i.web) ? ' · <a href="' + esc(i.web) + '" target="_blank" rel="noopener">' + esc(i.web.replace(/^https?:\/\/|\/$/g, "")) + "</a>" : "") +
-      "</p></section>"
+      '<div class="panel iletisim">' + s.join("") + "</div>" +
+      '<p class="iletisim-not">' + ikon("bilgi") + "<span>" + arayuz("iletisim.seriNo", dil) + "</span></p>" +
+      "</section>"
     );
   }
 
@@ -455,7 +440,7 @@
     const galeriKonum = icerik.querySelector(".galeri-serit");
     const galeriSol = galeriKonum ? galeriKonum.scrollLeft : 0;
 
-    icerik.innerHTML = biletHTML(dil) + guvenlikHTML(dil) + dokumanlarHTML(dil) + iletisimHTML(dil);
+    icerik.innerHTML = biletHTML(dil) + guvenlikHTML(dil) + iletisimHTML(dil);
     document.querySelector(".alt-bilgi").innerHTML = altBilgiHTML(dil);
 
     const serit = icerik.querySelector(".galeri-serit");
@@ -473,7 +458,6 @@
   function ustBarCiz() {
     const bar = document.querySelector(".ust-bar");
     bar.innerHTML =
-      '<a href="../" class="logo" aria-label="ENORPA">' + "EN" + LOGO_O + "RPA</a>" +
       '<div class="dil-alani">' + ikon("dunya", "dil-ikon") +
       '<div class="dil-secici" role="radiogroup" aria-label="Dil · Language · Язык" data-aktif="tr">' +
       DILLER.map((d, i) =>
