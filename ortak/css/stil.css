@@ -139,7 +139,7 @@ main.dil-gecisi { opacity: 0; }
 /* =====================================================================
    BİLET KART — dikey (mobil) · üstte akuamarin doku, altta görsel + bilgi
    ===================================================================== */
-.bilet-sahne { perspective: 900px; }
+.bilet-sahne { perspective: 1100px; padding-top: 10px; }
 .bilet {
   --delik: 14px;                       /* yan çentik yarıçapı */
   position: relative;
@@ -430,4 +430,24 @@ main.dil-gecisi { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Raptiye: kartı sabitler / serbest bırakır */
+.bilet-raptiye {
+  position: relative; flex: none;
+  width: 30px; height: 30px; border-radius: 50%; border: 0; padding: 0;
+  display: grid; place-items: center; cursor: pointer;
+  background: rgb(255 255 255 / 0.16); color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--gecis), box-shadow var(--gecis);
+}
+.bilet-raptiye::after { content: ""; position: absolute; inset: -6px; }
+.bilet-raptiye .ikon { width: 16px; height: 16px; stroke-width: 2; transform: rotate(40deg); transition: transform var(--gecis); }
+.bilet-raptiye[aria-pressed="true"] { background: #fff; color: var(--vurgu); box-shadow: 0 2px 8px rgb(0 0 0 / .25); }
+.bilet-raptiye[aria-pressed="true"] .ikon { transform: none; fill: currentColor; }
+.bilet-raptiye:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+@media (max-width: 360px) {
+  .bilet-logo { height: 20px; }
+  .bilet-rev { font-size: 11px; padding: 5px 8px; letter-spacing: .03em; }
+  .bilet-satir { gap: 8px; }
 }

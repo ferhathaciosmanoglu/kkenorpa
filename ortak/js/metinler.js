@@ -47,6 +47,10 @@ window.METIN = {
   "altbilgi.haklar":   { tr: "Tüm hakları saklıdır.", en: "All rights reserved.", ru: "Все права защищены." },
   /* Kart (bilet) metinleri — Ek A'ya eklenecek */
   "kart.etiket":       { tr: "Kullanım Kılavuzu", en: "User Manual", ru: "Руководство" },
+  "kart.sabitle":     { tr: "Kartı sabitle", en: "Pin the card", ru: "Закрепить карточку" },
+  "kart.serbest":      { tr: "Kartı serbest bırak", en: "Unpin the card", ru: "Открепить карточку" },
+  "kart.sabitlendi":   { tr: "Kart sabitlendi", en: "Card pinned", ru: "Карточка закреплена" },
+  "kart.serbestBirakildi": { tr: "Kart yeniden hareketli", en: "Card moves again", ru: "Карточка снова подвижна" },
   "kart.buKazan":      { tr: "Bu kazan", en: "This boiler", ru: "Этот котёл" },
   "kart.seriNo":       { tr: "Seri no", en: "Serial no.", ru: "Серийный №" },
   "model.kapasite":    { tr: "Isıl kapasite", en: "Heat output", ru: "Тепловая мощность" },

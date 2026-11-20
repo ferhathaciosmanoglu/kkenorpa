@@ -74,7 +74,8 @@
     dosya: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
     sol: '<path d="m15 18-6-6 6-6"/>',
     sag: '<path d="m9 18 6-6-6-6"/>',
-    kapat: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'
+    kapat: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    raptiye: '<path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>'
   };
   const ikon = (ad, sinif = "ikon") =>
     '<svg class="' + sinif + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + IKON[ad] + "</svg>";
@@ -181,10 +182,20 @@
   const MAX_EGIM = 6;
   let egimKart = null;               // dil değişiminde kart yeniden çizilir; jiroskop dinleyicisi tek kalır
   let jiroKuruldu = false;
+  const SABIT_ANAHTARI = "enorpa-kilavuz-sabit";
+  let sabit = false;
+  try { sabit = localStorage.getItem(SABIT_ANAHTARI) === "1"; } catch (_) {}
 
-  function egimUygula(kart, dx, dy, max = MAX_EGIM) {  // dx, dy: -0.5 … 0.5
+  function duzle(kart) {
+    kart.style.transition = "";
+    kart.style.transform = "";
+    kart.querySelector(".bilet-parlama").style.background = "transparent";
+  }
+
+  function egimUygula(kart, dx, dy, max = MAX_EGIM, maxDikey = max) {  // dx, dy: -0.5 … 0.5
+    if (sabit) return;
     const parlama = kart.querySelector(".bilet-parlama");
-    kart.style.transform = "rotateX(" + (-dy * 2 * max) + "deg) rotateY(" + (dx * 2 * max) + "deg) scale(1.01)";
+    kart.style.transform = "rotateX(" + (-dy * 2 * maxDikey) + "deg) rotateY(" + (dx * 2 * max) + "deg)";
     parlama.style.background = "radial-gradient(45% 35% at " + (dx + 0.5) * 100 + "% " + (dy + 0.5) * 100 + "%, rgb(255 255 255 / .16), transparent 70%)";
   }
 
@@ -195,11 +206,11 @@
     const sinirla = (v) => Math.max(-0.5, Math.min(0.5, v));
     function ciz() {
       raf = 0;
-      if (!egimKart || HAREKET_AZ.matches) return;
+      if (!egimKart || HAREKET_AZ.matches || sabit) return;
       simdi[0] += (hedef[0] - simdi[0]) * 0.15;
       simdi[1] += (hedef[1] - simdi[1]) * 0.15;
       egimKart.style.transition = "none";
-      egimUygula(egimKart, simdi[0], simdi[1], 14);   // telefonda daha belirgin eğim
+      egimUygula(egimKart, simdi[0], simdi[1], 14, 4);   // telefonda: sağa-sola belirgin, öne-arkaya hafif (kart yukarı taşmasın)
       if (Math.abs(hedef[0] - simdi[0]) + Math.abs(hedef[1] - simdi[1]) > 0.002) raf = requestAnimationFrame(ciz);
     }
     function yonelim(e) {
@@ -207,8 +218,8 @@
       const yatay = Math.abs(screen.orientation ? screen.orientation.angle : window.orientation || 0) === 90;
       const x = yatay ? e.beta : e.gamma, y = yatay ? -e.gamma : e.beta;
       if (!taban) taban = [x, y];
-      taban[0] += (x - taban[0]) * 0.01;      // yavaşça yeni tutuş açısına uyum sağla
-      taban[1] += (y - taban[1]) * 0.01;
+      taban[0] += (x - taban[0]) * 0.03;      // eğik tutulunca kart birkaç saniyede düz konuma döner
+      taban[1] += (y - taban[1]) * 0.05;
       hedef = [sinirla((x - taban[0]) / 30), sinirla((y - taban[1]) / 30)];
       if (!raf) raf = requestAnimationFrame(ciz);
     }
@@ -224,6 +235,25 @@
     }
   }
 
+  function raptiyeKur(kart, dil) {
+    const d = kart.querySelector(".bilet-raptiye");
+    if (!d) return;
+    const guncelle = () => {
+      d.setAttribute("aria-pressed", String(sabit));
+      d.setAttribute("aria-label", arayuz(sabit ? "kart.serbest" : "kart.sabitle", dil));
+      d.title = d.getAttribute("aria-label");
+    };
+    guncelle();
+    d.addEventListener("click", (e) => {
+      e.stopPropagation();
+      sabit = !sabit;
+      try { localStorage.setItem(SABIT_ANAHTARI, sabit ? "1" : "0"); } catch (_) {}
+      if (sabit) duzle(kart);
+      guncelle();
+      bildir(arayuz(sabit ? "kart.sabitlendi" : "kart.serbestBirakildi", dil));
+    });
+  }
+
   function egimKur(kart) {
     egimKart = kart;
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -233,11 +263,7 @@
         kart.style.transition = "none";
         egimUygula(kart, (e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
       });
-      kart.addEventListener("pointerleave", () => {
-        kart.style.transition = "";
-        kart.style.transform = "";
-        kart.querySelector(".bilet-parlama").style.background = "transparent";
-      });
+      kart.addEventListener("pointerleave", () => duzle(kart));
     } else {
       jiroskopKur();
     }
@@ -316,6 +342,7 @@
           '<canvas class="bilet-doku" aria-hidden="true"></canvas>' +
           '<span class="bilet-filigran" aria-hidden="true">' + esc(u.belgeKodu) + "</span>" +
           '<div class="bilet-satir">' + kartLogo +
+            '<button class="bilet-raptiye" type="button" aria-pressed="false">' + ikon("raptiye") + "</button>" +
             '<span class="bilet-rev">' + arayuz("kart.etiket", dil) + "</span>" +
           "</div>" +
           '<div class="bilet-tur">' + esc(metin(u.tur, dil)) + "</div>" +
@@ -486,6 +513,7 @@
     if (galeriKonum) kart.style.animation = "none";   // dil değişiminde giriş animasyonu tekrarlanmaz
     dokuyuBaslat(icerik.querySelector(".bilet-doku"));
     egimKur(kart);
+    raptiyeKur(kart, dil);
     icerik.querySelector("[data-paylas]")?.addEventListener("click", () => paylas(dil));
     window.scrollTo(0, kaydirma);
   }
