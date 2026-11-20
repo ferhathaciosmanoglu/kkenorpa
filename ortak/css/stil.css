@@ -20,7 +20,7 @@
   --dikkat: #F9A825;
   --not: #1565C0;
 
-  --render-zemin: #474747;             /* renderların gri stüdyo zemini */
+  --render-zemin: #494949;            /* renderların gri stüdyo zemini */
 
   --yazi: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
 
@@ -248,13 +248,14 @@ main.dil-gecisi { opacity: 0; }
 .galeri-serit::-webkit-scrollbar { display: none; }
 .galeri-serit figure {
   flex: 0 0 100%; margin: 0; scroll-snap-align: center;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 5 / 3;
   display: grid; place-items: center;
 }
 .galeri-serit button {
   all: unset; display: block; width: 100%; height: 100%; cursor: zoom-in;
 }
 .galeri-serit button:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
+.galeri-serit picture { display: contents; }
 .galeri-serit img { width: 100%; height: 100%; object-fit: contain; }
 .galeri-ok {
   position: absolute; top: 50%; transform: translateY(-50%);

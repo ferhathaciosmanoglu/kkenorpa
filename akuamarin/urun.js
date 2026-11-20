@@ -79,8 +79,10 @@ window.URUN = {
 
   guvenlik: ["G1", "G2", "G3", "G6", "G7"],
 
-  // Render görselleri: gorsel/{ad}.jpg (araclar/gorsel-hazirla.mjs gelince AVIF/WebP + genişlikler)
+  // Render görselleri: gorsel/{ad}-{800|1600}.{webp|jpg}, 5:3 (kaynak: gorsel/kaynak/, repoya girmez)
+  // Kaynak eşleşmesi: F → onden · FRI → on · BLI → arka · L → yan (Enorpa A0600 renderları)
   // Bulunamayan görsel galeriden otomatik düşer; hiçbiri yoksa "yedek" görünür.
+  gorselGenislikleri: [800, 1600],
   galeri: [
     { gorsel: "akuamarin-on",
       alt: { tr: "Önden üç çeyrek görünüm, brülörlü", en: "Front three-quarter view with burner",

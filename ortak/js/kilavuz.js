@@ -245,11 +245,15 @@
       ]);
     }
 
+    // gorsel/{ad}-{800|1600}.{webp|jpg} (§3.4 adlandırma); büyük görünüm 1600 px'i açar
+    const G = u.gorselGenislikleri || [800, 1600];
+    const set = (ad, uz) => G.map((w) => "gorsel/" + esc(ad) + "-" + w + "." + uz + " " + w + "w").join(", ");
     const galeri = u.galeri.length ? u.galeri : [u.galeriYedek];
     const slaytlar = galeri.map((g, i) =>
-      '<figure data-i="' + i + '"><button type="button" data-buyut="' + i + '" aria-label="' + esc(arayuz("galeri.buyut", dil) + ": " + metin(g.alt, dil)) + '">' +
-      '<img src="gorsel/' + esc(g.gorsel) + '.jpg" alt="' + esc(metin(g.alt, dil)) + '" ' +
-      (i === 0 ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async" width="1600" height="1000"></button></figure>'
+      '<figure data-i="' + i + '"><button type="button" data-buyut="' + i + '" data-buyuk="gorsel/' + esc(g.gorsel) + "-" + G[G.length - 1] + '.jpg" aria-label="' + esc(arayuz("galeri.buyut", dil) + ": " + metin(g.alt, dil)) + '">' +
+      '<picture><source type="image/webp" srcset="' + set(g.gorsel, "webp") + '" sizes="(min-width: 480px) 448px, calc(100vw - 32px)">' +
+      '<img src="gorsel/' + esc(g.gorsel) + "-" + G[0] + '.jpg" srcset="' + set(g.gorsel, "jpg") + '" sizes="(min-width: 480px) 448px, calc(100vw - 32px)" alt="' + esc(metin(g.alt, dil)) + '" ' +
+      (i === 0 ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async" width="1760" height="1056"></picture></button></figure>'
     ).join("");
 
     let indir = "";
@@ -417,7 +421,7 @@
       const img = b.querySelector("img");
       let d = document.getElementById("buyuk");
       if (!d || !d.showModal) { window.open(img.src, "_blank", "noopener"); return; }
-      d.querySelector("img").src = img.src;
+      d.querySelector("img").src = b.dataset.buyuk || img.currentSrc || img.src;
       d.querySelector("img").alt = img.alt;
       d.querySelector("button").setAttribute("aria-label", arayuz("galeri.kapat", dil));
       d.showModal();
