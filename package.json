@@ -1,0 +1,9 @@
+{
+  "name": "enorpa-kilavuz-araclar",
+  "private": true,
+  "description": "Yalnızca araclar/ betikleri için (site derleme adımı içermez)",
+  "type": "module",
+  "devDependencies": {
+    "qrcode": "1.5.4"
+  }
+}
