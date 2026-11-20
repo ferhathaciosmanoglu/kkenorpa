@@ -7,7 +7,7 @@
    ===================================================================== */
 window.URUN = {
   sablonSurumu: "1.1",
-  durum: "yayinda",                   // ⚠️ kullanım kılavuzu yok; QR şimdilik ürün kataloğunu açıyor (bkz. dokumanlar)
+  durum: "yayinda",                   // yayında — EN/RU çeviri onayı bekliyor
   kod: "turkuaz",
   belgeKodu: "TRK",
   ad: "Turkuaz",                      // çevrilmez (EN broşürde "Turquoise" yazıyor; 🟡 K-03 gereği sayfada "Turkuaz")
@@ -17,14 +17,14 @@ window.URUN = {
 
   meta: {
     baslik: {
-      tr: "Turkuaz Ürün Kataloğu | ENORPA",
-      en: "Turkuaz Product Catalogue | ENORPA",
-      ru: "Turkuaz — каталог продукции | ENORPA"
+      tr: "Turkuaz Kullanım Kılavuzu | ENORPA",
+      en: "Turkuaz User Manual | ENORPA",
+      ru: "Turkuaz — руководство по эксплуатации | ENORPA"
     },
     aciklama: {
-      tr: "Turkuaz katı yakıtlı sıcak su kazanının ürün kataloğu, teknik bilgileri ve servis iletişimi.",
-      en: "Product catalogue, technical information and service contacts for the Turkuaz solid-fuel hot water boiler.",
-      ru: "Каталог продукции, технические данные и сервисные контакты водогрейного котла Turkuaz на твёрдом топливе."
+      tr: "Turkuaz katı yakıtlı sıcak su kazanının kullanım kılavuzu, teknik bilgileri ve servis iletişimi.",
+      en: "User manual, technical information and service contacts for the Turkuaz solid-fuel hot water boiler.",
+      ru: "Руководство по эксплуатации, технические данные и сервисные контакты водогрейного котла Turkuaz на твёрдом топливе."
     }
   },
 
@@ -94,28 +94,27 @@ window.URUN = {
 
   dokumanlar: [
     {
-      tur: "katalog",
+      tur: "kullanim",
       ana: true,
-      baslik: { tr: "Ürün Kataloğu", en: "Product Catalogue", ru: "Каталог продукции" },
-      // Akuamarin'deki "Kullanım Kılavuzu" metinleri yerine bu etiketler gösterilir
-      butonEtiketi: { tr: "Ürün Kataloğunu Görüntüle", en: "View Product Catalogue", ru: "Открыть каталог" },
-      kartEtiketi: { tr: "Ürün Kataloğu", en: "Product Catalogue", ru: "Каталог" },
+      baslik: { tr: "Kullanım Kılavuzu", en: "User Manual", ru: "Руководство по эксплуатации" },
+      belgeNo: "ENP-TRK",             // PDF kodları: ENP-TRK-TR / -EN / -RU · kaynak: araclar/kilavuz-pdf/uret_turkuaz.py
       diller: {
-        tr: {
-          dosya: "pdf/katalog-tr.pdf",
-          indirmeAdi: "ENORPA_Turkuaz_Urun_Katalogu_TR.pdf",
-          revizyon: "2026-02", tarih: "2026-02", boyutMB: 1.0, sayfa: 7, onbellek: "20261120"
-        },
-        en: {
-          dosya: "pdf/katalog-en.pdf",
-          indirmeAdi: "ENORPA_Turkuaz_Product_Catalogue_EN.pdf",
-          revizyon: "2026-02", tarih: "2026-02", boyutMB: 1.6, sayfa: 7, onbellek: "20261120"
-        },
-        ru: {
-          dosya: "pdf/katalog-ru.pdf",
-          indirmeAdi: "ENORPA_Turkuaz_Katalog_RU.pdf",
-          revizyon: "2026-02", tarih: "2026-02", boyutMB: 1.4, sayfa: 7, onbellek: "20261120"
-        }
+        tr: { dosya: "pdf/kilavuz-tr.pdf", indirmeAdi: "ENORPA_Turkuaz_Kullanim_Kilavuzu_TR_Rev01.pdf",
+              revizyon: "01", tarih: "2026-11", boyutMB: 0.8, sayfa: 22, onbellek: "20261120" },
+        en: { dosya: "pdf/kilavuz-en.pdf", indirmeAdi: "ENORPA_Turkuaz_User_Manual_EN_Rev01.pdf",
+              revizyon: "01", tarih: "2026-11", boyutMB: 0.8, sayfa: 22, onbellek: "20261120" },
+        ru: { dosya: "pdf/kilavuz-ru.pdf", indirmeAdi: "ENORPA_Turkuaz_Rukovodstvo_RU_Rev01.pdf",
+              revizyon: "01", tarih: "2026-11", boyutMB: 0.9, sayfa: 22, onbellek: "20261120" }
+      }
+    },
+    {
+      // Ürün broşürü (2026-02) — sayfada şimdilik gösterilmiyor; doğrudan bağlantıyla açılabilir
+      tur: "katalog",
+      baslik: { tr: "Ürün Kataloğu", en: "Product Catalogue", ru: "Каталог продукции" },
+      diller: {
+        tr: { dosya: "pdf/katalog-tr.pdf", indirmeAdi: "ENORPA_Turkuaz_Urun_Katalogu_TR.pdf", revizyon: "2026-02", boyutMB: 1.0, sayfa: 7, onbellek: "20261120" },
+        en: { dosya: "pdf/katalog-en.pdf", indirmeAdi: "ENORPA_Turkuaz_Product_Catalogue_EN.pdf", revizyon: "2026-02", boyutMB: 1.6, sayfa: 7, onbellek: "20261120" },
+        ru: { dosya: "pdf/katalog-ru.pdf", indirmeAdi: "ENORPA_Turkuaz_Katalog_RU.pdf", revizyon: "2026-02", boyutMB: 1.4, sayfa: 7, onbellek: "20261120" }
       }
     }
   ],
