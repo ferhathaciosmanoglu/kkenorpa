@@ -102,12 +102,15 @@ window.URUN = {
       }
     },
     {
-      // Otomasyon panosu kullanım kılavuzu ve elektrik projesi — yalnızca Türkçe (kaynak: Pano Kullanım Klavuzu.pdf)
+      // Otomasyon panosu kullanım kılavuzu — TR/EN/RU · ENP-KLS-PANO · kaynak: araclar/kilavuz-pdf/uret_pano.py (Word kılavuzundan)
       tur: "pano",
       goster: true,
-      baslik: { tr: "Otomasyon Panosu Kullanım Kılavuzu", en: "Automation Panel Manual", ru: "Руководство по щиту автоматики" },
+      belgeNo: "ENP-KLS-PANO",
+      baslik: { tr: "Otomasyon Panosu Kullanım Kılavuzu", en: "Automation Panel User Manual", ru: "Руководство по щиту автоматики" },
       diller: {
-        tr: { dosya: "pdf/pano-tr.pdf", indirmeAdi: "ENORPA_Kalsedon_Pano_Kullanim_Kilavuzu_TR.pdf", revizyon: "01", boyutMB: 0.6, sayfa: 13, onbellek: "20261120" }
+        tr: { dosya: "pdf/pano-tr.pdf", indirmeAdi: "ENORPA_Kalsedon_Pano_Kullanim_Kilavuzu_TR_Rev01.pdf", revizyon: "01", tarih: "2026-11", boyutMB: 2.0, sayfa: 10, onbellek: "20261124" },
+        en: { dosya: "pdf/pano-en.pdf", indirmeAdi: "ENORPA_Kalsedon_Panel_Manual_EN_Rev01.pdf", revizyon: "01", tarih: "2026-11", boyutMB: 2.0, sayfa: 10, onbellek: "20261124" },
+        ru: { dosya: "pdf/pano-ru.pdf", indirmeAdi: "ENORPA_Kalsedon_Rukovodstvo_Shchit_RU_Rev01.pdf", revizyon: "01", tarih: "2026-11", boyutMB: 2.0, sayfa: 10, onbellek: "20261124" }
       }
     },
     {
